@@ -5,6 +5,8 @@ import Dude from '../Actors/Dude.js';
 import DiamondSquare from '../../DiamondSquare.js';
 import Graph from '../../AStar.js';
 
+const numDudes = 3;
+
 export default class World {
   constructor( _rows, _columns ) {
     this.rows = _rows;
@@ -41,19 +43,38 @@ export default class World {
       this.tiles.push( new Tile( type, pathable, i%this.rows, parseInt(i/this.columns) ) );
     }
 
-    //Create dudes
-    var placed = false
-    while( !placed ) {
+    //Create main dude
+    // var placed = false
+    // while( !placed ) {
+    //   let x = parseInt( Math.random()*this.rows );
+    //   let y = parseInt( Math.random()*this.rows );
+    //   let index = this._getIndex( x, y );
+    //   if( this.tiles[ index ].pathable ) {
+    //     let dude = new Dude( 0, this.tiles[ index ] );
+    //     this.mainDude = dude;
+    //     placed = true;
+    //   }
+    // }
+    let tile = this.getPathableTile();
+    this.mainDude = new Dude( 0, tile );
+
+    //Create other dudes
+    while( this.dudes.length < numDudes ) {
+      let tile = this.getPathableTile();
+      this.dudes.push( new Dude( 1, tile ) );
+    }
+
+  }
+
+  getPathableTile() {
+    while( true ) {
       let x = parseInt( Math.random()*this.rows );
       let y = parseInt( Math.random()*this.rows );
       let index = this._getIndex( x, y );
       if( this.tiles[ index ].pathable ) {
-        let dude = new Dude( 0, this.tiles[ index ] );
-        this.mainDude = dude;
-        placed = true;
+        return this.tiles[ index ];
       }
     }
-
   }
   getTile( x, y ) {
     if( x < 0 || y < 0 || x >= this.columns || y >= this.rows ) {

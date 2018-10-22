@@ -53,12 +53,16 @@ export default class Square extends React.Component {
     if( this.state.dude !== null ) {
       const cx = x + 0.5 * this.props.settings.width;
       const cy = y + 0.5 * this.props.settings.height;
+      let colour = 'black';
+      if( this.state.dude.type !== 0 ) {
+        colour = 'red';
+      }
       dude = <Circle
         x={cx}
         y={cy}
         width={this.props.settings.width*0.5}
         height={this.props.settings.height*0.5}
-        fill={'black'}
+        fill={colour}
         onClick={ () => this.props.onClick( this ) }
         dude={ this.state.dude }
       />

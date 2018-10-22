@@ -16,6 +16,8 @@ export default class Dude {
       this.location.square.setPath( false );
       next.setDude( this );
       this.location = next;
+      return true;
     }
+    return false;
   }
 }

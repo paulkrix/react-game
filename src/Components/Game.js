@@ -27,18 +27,22 @@ export default class Game extends React.Component {
   handleKeyPress( event ) {
     switch( event.key ) {
       case "ArrowUp":
+      case "w":
         event.preventDefault();
         this.attemptToMoveDude( this.state.world.mainDude, 0, -1 );
         break;
       case "ArrowDown":
+      case "s":
         event.preventDefault();
         this.attemptToMoveDude( this.state.world.mainDude, 0, 1 );
         break;
       case "ArrowRight":
+      case "d":
         event.preventDefault();
         this.attemptToMoveDude( this.state.world.mainDude, 1, 0 );
         break;
       case "ArrowLeft":
+      case "a":
         event.preventDefault();
         this.attemptToMoveDude( this.state.world.mainDude, -1, 0 );
         break;
@@ -93,11 +97,16 @@ export default class Game extends React.Component {
       event.do( this );
     }
     this.addEvent( new Event( (game) => {
-      let dudes = this.state.world.dudes;
-      for( let i = 0; i < dudes.length; i++ ) {
-        dudes[i].step();
+      //Only step any other dudes if the main dude has an action
+      if( this.state.world.mainDude.step() ) {
+        let dudes = this.state.world.dudes;
+        for( let i = 0; i < dudes.length; i++ ) {
+          let path = this.state.world._doTheThing( dudes[i].location, this.state.world.mainDude.location );
+          dudes[i].setPath( path );
+          dudes[i].step();
+        }
       }
-      this.state.world.mainDude.step();
+
     }));
   }
   showPath( path ) {

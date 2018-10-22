@@ -11,7 +11,7 @@ export default class World {
     this.columns = _columns;
     this.tiles = [];
     this.dudes = [];
-
+    this.mainDude = null;
     let ds = new DiamondSquare( _rows );
     ds.setCorners( [0.5,0.2,0.3,0.1] );
     ds.setError( 1 );
@@ -20,11 +20,6 @@ export default class World {
 
     //Create tiles
     for( let i = 0; i < this.rows*this.columns; i++ ) {
-      // let type = parseInt( Math.random()*COLOURS.length );
-      // let pathable = true;
-      // if( type === 2 ) {
-      //   pathable = false;
-      // }
       let type = 0;
       let pathable = false;
       if( heights[i] > 0.1 ) {
@@ -54,7 +49,7 @@ export default class World {
       let index = this._getIndex( x, y );
       if( this.tiles[ index ].pathable ) {
         let dude = new Dude( 0, this.tiles[ index ] );
-        this.dudes.push( dude );
+        this.mainDude = dude;
         this.tiles[ index ].setDude( dude );
         placed = true;
       }
@@ -66,7 +61,6 @@ export default class World {
     if( performance ) {
       now = performance.now();
     }
-    // this.graph = new Graph( origin, destination, this.tiles, this.columns, this.rows );
     let graph = new Graph( origin, destination, this.tiles, this.columns, this.rows );
     if( performance ) {
       document.getElementById('performance').innerHTML = "Calculation took " + (performance.now() - now) + " milliseconds";

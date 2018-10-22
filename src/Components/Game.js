@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import {Layer, Rect, Circle, Stage, Group} from 'react-konva';
+import {Stage, Layer} from 'react-konva';
 
 import Event from './Event.js';
 import Square from './World/Square.js';
@@ -17,6 +17,30 @@ export default class Game extends React.Component {
     this.events = [];
     this.run();
     this.pathed = [];
+  }
+  componentDidMount() {
+    document.addEventListener("keydown", this.handleKeyPress, false);
+  }
+  componentWillUnmount() {
+    document.removeEventListener("keydown", this.handleKeyPress, false);
+  }
+  handleKeyPress( event ) {
+    switch( event.key ) {
+      case "ArrowUp":
+        event.preventDefault();
+        break;
+      case "ArrowDown":
+        event.preventDefault();
+        break;
+      case "ArrowRight":
+        event.preventDefault();
+        break;
+      case "ArrowLeft":
+        event.preventDefault();
+        break;
+      default:
+        break;
+    }
   }
   handleClick( square ) {
     for( let i = 0; i < this.pathed.length; i++ ) {

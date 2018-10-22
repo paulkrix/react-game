@@ -50,11 +50,26 @@ export default class World {
       if( this.tiles[ index ].pathable ) {
         let dude = new Dude( 0, this.tiles[ index ] );
         this.mainDude = dude;
-        this.tiles[ index ].setDude( dude );
         placed = true;
       }
     }
 
+  }
+  getTile( x, y ) {
+    if( x < 0 || y < 0 || x >= this.columns || y >= this.rows ) {
+      return false;
+    }
+    let index = this._getIndex( x, y );
+    return this.tiles[ index ];
+  }
+  pathable( x, y ) {
+    if( x >= 0 && x < this.rows && y >= 0 && y < this.columns ) {
+      let index = this._getIndex( x, y );
+      if( this.tiles[ index ].pathable ) {
+        return true;
+      }
+    }
+    return false;
   }
   _doTheThing( origin, destination ) {
     let now = null;

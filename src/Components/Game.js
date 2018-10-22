@@ -19,28 +19,43 @@ export default class Game extends React.Component {
     this.pathed = [];
   }
   componentDidMount() {
-    document.addEventListener("keydown", this.handleKeyPress, false);
+    document.addEventListener("keydown", (event) => { this.handleKeyPress(event); }, false);
   }
   componentWillUnmount() {
-    document.removeEventListener("keydown", this.handleKeyPress, false);
+    document.removeEventListener("keydown", (event) => { this.handleKeyPress(event); }, false);
   }
   handleKeyPress( event ) {
     switch( event.key ) {
       case "ArrowUp":
         event.preventDefault();
+        this.attemptToMoveDude( this.state.world.mainDude, 0, -1 );
         break;
       case "ArrowDown":
         event.preventDefault();
+        this.attemptToMoveDude( this.state.world.mainDude, 0, 1 );
         break;
       case "ArrowRight":
         event.preventDefault();
+        this.attemptToMoveDude( this.state.world.mainDude, 1, 0 );
         break;
       case "ArrowLeft":
         event.preventDefault();
+        this.attemptToMoveDude( this.state.world.mainDude, -1, 0 );
         break;
       default:
         break;
     }
+  }
+  attemptToMoveDude( dude, deltaX, deltaY ) {
+    let dudeLocation = dude.location;
+    var canMove = true;
+    var newX = deltaX + dudeLocation.x;
+    var newY = deltaY + dudeLocation.y;
+    let target = this.state.world.getTile( newX, newY );
+    let path = this.state.world._doTheThing( dudeLocation, target );
+    dude.setPath( path );
+    this.pathed = path;
+
   }
   handleClick( square ) {
     for( let i = 0; i < this.pathed.length; i++ ) {
@@ -82,6 +97,7 @@ export default class Game extends React.Component {
       for( let i = 0; i < dudes.length; i++ ) {
         dudes[i].step();
       }
+      this.state.world.mainDude.step();
     }));
   }
   showPath( path ) {
